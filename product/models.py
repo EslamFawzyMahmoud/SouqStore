@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import slugify
 # Create your models here.
 
 class Product(models.Model):
@@ -12,9 +13,17 @@ class Product(models.Model):
     PRDcost=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Product Cost"))
     PRDcreated=models.DateTimeField(verbose_name=_("Product Created At"))
 
+    PRDSlug=models.SlugField(blank=True,null=True)
+
     class Meta:
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
+
+    def save(self,*args,**kwargs):
+        if not self.PRDSlug:
+            self.PRDSlug=slugify(self.PRDname)
+        super(Product,self).save(*args,**kwargs)
+
     def __str__(self):
         return self.PRDname
 
