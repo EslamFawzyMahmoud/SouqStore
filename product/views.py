@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404,render
 from .models import Product
 from django.core.paginator import Paginator
 
@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 
 def product_list(request):
     product_list=Product.objects.all()
-    paginator = Paginator(product_list, 6)
+    paginator = Paginator(product_list, 2)
     page = request.GET.get('page')
     product_list = paginator.get_page(page)
     context={'product_list':product_list}

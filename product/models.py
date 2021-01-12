@@ -1,19 +1,24 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
+from django.urls import reverse
 # Create your models here.
 
 class Product(models.Model):
-    PRDname=models.CharField(max_length=100,verbose_name=_("Product name"))
+    PRDName=models.CharField(max_length=100,verbose_name=_("Product name"))
     PRDCategory=models.ForeignKey('Category',on_delete=models.CASCADE,blank=True,null=True)
     PRDBrand=models.ForeignKey('settings.Brand',on_delete=models.CASCADE,blank=True,null=True)
     PRDDesc=models.TextField(verbose_name=_("Product Description"))
     PRDImage=models.ImageField(upload_to='product/',verbose_name=_("Image"),blank=True,null=True)
     PRDprice=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Product Price"))
+    PRDDiscountPrice=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Discount Price"))
     PRDcost=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Product Cost"))
     PRDcreated=models.DateTimeField(verbose_name=_("Product Created At"))
-
     PRDSlug=models.SlugField(blank=True,null=True)
+    PRDIsNew=models.BooleanField(default=True)
+    PRDIsBestSeller=models.BooleanField(default=False)
+
+
 
     class Meta:
         verbose_name = _("Product")
@@ -21,11 +26,12 @@ class Product(models.Model):
 
     def save(self,*args,**kwargs):
         if not self.PRDSlug:
-            self.PRDSlug=slugify(self.PRDname)
+            self.PRDSlug=slugify(self.PRDName)
         super(Product,self).save(*args,**kwargs)
 
+
     def __str__(self):
-        return self.PRDname
+        return self.PRDName
 
 class ProductImage(models.Model):
     PRDIProduct=models.ForeignKey(Product,on_delete=models.CASCADE,verbose_name=_("Product"))

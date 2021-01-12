@@ -29,3 +29,6 @@ body,
 .card-img-top{
   height: 246px;
 }
+.green{
+  background-color: #00c851 !important;
+}
