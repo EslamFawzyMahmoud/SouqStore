@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+<main class="mt-5">
+    <div class="container mynav ">
+
+{% block body %}
+  <p>Logged out!</p>
+  <a href="{% url 'login'%}">Click here to login again.</a>
+{% endblock body %}
+
+    </div>
+</main>

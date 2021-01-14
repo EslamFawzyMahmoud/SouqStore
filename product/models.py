@@ -6,30 +6,31 @@ from django.urls import reverse
 
 class Product(models.Model):
     PRDName=models.CharField(max_length=100,verbose_name=_("Product name"))
-    PRDCategory=models.ForeignKey('Category',on_delete=models.CASCADE,blank=True,null=True)
-    PRDBrand=models.ForeignKey('settings.Brand',on_delete=models.CASCADE,blank=True,null=True)
-    PRDDesc=models.TextField(verbose_name=_("Product Description"))
+    PRDCategory=models.ForeignKey('Category',on_delete=models.CASCADE,blank=True,null=True,verbose_name=_("Category"))
+    PRDBrand=models.ForeignKey('settings.Brand',on_delete=models.CASCADE,blank=True,null=True,verbose_name=_("Brand"))
+    PRDDesc=models.TextField(verbose_name=_("Description"))
     PRDImage=models.ImageField(upload_to='product/',verbose_name=_("Image"),blank=True,null=True)
-    PRDprice=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Product Price"))
+    PRDprice=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Price"))
     PRDDiscountPrice=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Discount Price"))
-    PRDcost=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Product Cost"))
-    PRDcreated=models.DateTimeField(verbose_name=_("Product Created At"))
-    PRDSlug=models.SlugField(blank=True,null=True)
-    PRDIsNew=models.BooleanField(default=True)
-    PRDIsBestSeller=models.BooleanField(default=False)
+    PRDcost=models.DecimalField(max_digits=5,decimal_places=2,verbose_name=_("Cost"))
+    PRDcreated=models.DateTimeField(verbose_name=_("Created At"))
+    PRDSlug=models.SlugField(blank=True,null=True,verbose_name=_("Product Url"))
+    PRDIsNew=models.BooleanField(default=True,verbose_name=_("New Product"))
+    PRDIsBestSeller=models.BooleanField(default=False,verbose_name=_("Best Seller"))
 
-
+    def save(self, *args, **kwargs):
+        if not self.PRDSlug:
+            self.PRDSlug = slugify(self.PRDName)
+        super(Product, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
 
-    def save(self,*args,**kwargs):
-        if not self.PRDSlug:
-            self.PRDSlug=slugify(self.PRDName)
-        super(Product,self).save(*args,**kwargs)
 
-
+    def get_absolute_url(self):
+        return reverse('product:product_detail',kwargs={'slug':self.PRDSlug})
+    
     def __str__(self):
         return self.PRDName
 

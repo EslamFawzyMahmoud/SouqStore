@@ -89,18 +89,32 @@
               <span class="clearfix d-none d-sm-inline-block"> Cart </span>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="" class="nav-link border border-light rounded waves-effect"
-              target="_blank">
+            {% if user.is_authenticated  %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-user-circle"></i></i>Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="#">My Profile</a>
+                      <a class="dropdown-item" href="#">Edit My Profile</a>
+                      <a class="dropdown-item" href="#">Change Password</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">My Order</a>
+                      <a class="dropdown-item" href="#">Track Order</a>
+                    </div>
+                  </li>
+            {% else %}
+            <li class="nav-item">
+            <a href="{% url 'login' %}" class="nav-link border border-light rounded waves-effect">
               <i class="fas fa-sign-in-alt mr-2"></i>login
             </a>
           </li>
             <li class="nav-item">
-            <a href="" class="nav-link border border-light rounded waves-effect"
-              target="_blank">
+            <a href="{% url 'accounts:signup' %}" class="nav-link border border-light rounded waves-effect">
               <i class="fas fa-user-plus mr-2"></i>Sign Up
             </a>
           </li>
+            {% endif %}
         </ul>
 
       </div>
